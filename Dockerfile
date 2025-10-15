@@ -35,6 +35,7 @@ RUN pip3 install --upgrade pip && \
         alembic==1.13.0 \
         openai==1.7.2 \
         anthropic==0.8.1 \
+        tiktoken==0.5.2 \
         fastapi==0.109.0 \
         uvicorn[standard]==0.25.0 \
         pydantic==2.5.3 \

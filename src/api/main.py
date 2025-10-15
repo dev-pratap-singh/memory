@@ -13,6 +13,7 @@ from pydantic import BaseModel
 from src.api.orchestrator import get_orchestrator
 from src.database.connection import get_db_manager
 from src.utils.config_loader import get_config
+from src.api.memory_api import router as memory_router
 
 # Configure logging
 logging.basicConfig(
@@ -39,6 +40,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(memory_router)
 
 
 # Pydantic models
