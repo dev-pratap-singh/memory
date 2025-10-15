@@ -1,0 +1,38 @@
+{
+  "config": {
+    "target_conversations": 5000,
+    "started_at": "2025-10-14T21:17:08.212609+00:00",
+    "completed_at": "2025-10-14T21:19:21.539255+00:00"
+  },
+  "population": {
+    "stored_count": 5000,
+    "failed_count": 0,
+    "total_time_seconds": 20.739644765853882,
+    "conversations_per_second": 241.08416785576233,
+    "average_batch_time_seconds": 4.147396278381348,
+    "batches_completed": 5
+  },
+  "retrieval": {
+    "total_queries": 100,
+    "average_query_time_ms": 5.877950191497803,
+    "median_query_time_ms": 5.62441349029541,
+    "p95_query_time_ms": 7.400953769683838,
+    "p99_query_time_ms": 11.168816089630148,
+    "average_results_returned": 10.0,
+    "queries_per_second": 170.12733477164474
+  },
+  "latency": {
+    "end_to_end_avg_ms": 10108.725452423096,
+    "end_to_end_median_ms": 9858.651399612427,
+    "end_to_end_p95_ms": 12336.50768995285,
+    "end_to_end_p99_ms": 12434.009721279144
+  },
+  "accuracy": {},
+  "context_window": {
+    "max_context_tokens": 125000,
+    "estimated_tokens_used": 99882.25,
+    "utilization_percentage": 79.9058,
+    "conversations_in_context": 773,
+    "total_chars": 399529
+  }
+}

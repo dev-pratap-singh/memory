@@ -1,0 +1,73 @@
+# Core Dependencies
+# python>=3.10  # Not a package - commented out
+
+# Database
+psycopg2-binary==2.9.9
+pgvector==0.2.4
+sqlalchemy==2.0.23
+alembic==1.13.0
+
+# ML/AI Models
+torch==2.1.2
+transformers==4.36.2
+sentence-transformers==2.3.1
+accelerate==0.25.0
+peft==0.7.1
+bitsandbytes==0.41.3
+datasets==2.16.0
+
+# LLM Providers
+openai==1.7.2
+anthropic==0.8.1
+
+# Vector Operations
+numpy==1.26.3
+scipy==1.11.4
+
+# API & Web
+fastapi==0.109.0
+uvicorn[standard]==0.25.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Configuration
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Async & Task Queue
+# asyncio==3.4.3  # Built-in to Python 3 - commented out
+celery==5.3.4
+redis==5.0.1
+aioredis==2.0.1
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+python-json-logger==2.0.7
+structlog==24.1.0
+
+# Utilities
+tqdm==4.66.1
+rich==13.7.0
+click==8.1.7
+tenacity==8.2.3
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+httpx==0.26.0
+
+# Code Quality
+black==23.12.1
+flake8==7.0.0
+mypy==1.8.0
+isort==5.13.2
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.5.3
+
+# Development
+ipython==8.19.0
+jupyter==1.0.0

@@ -1,0 +1,204 @@
+# Dual-Model Memory System Configuration
+
+# Database Configuration (PostgreSQL with pgvector)
+database:
+  host: ${DB_HOST:localhost}
+  port: ${DB_PORT:5432}
+  name: ${DB_NAME:memory_db}
+  user: ${DB_USER:postgres}
+  password: ${DB_PASSWORD:postgres}
+  pool_size: 10
+  max_overflow: 20
+
+# Small Language Model (SLM) Configuration
+slm:
+  # Current model configuration
+  current:
+    name: "microsoft/phi-2"  # 2.7B parameters, ~4GB VRAM
+    type: "phi"
+    context_window: 2048
+    quantization: "none"  # Options: "none", "8bit", "4bit" - disabled for testing
+    device: "cpu"  # Changed to cpu for testing compatibility
+
+  # Next upgrade model (for future use)
+  next:
+    name: "mistralai/Mistral-7B-v0.1"  # 7B parameters, ~8GB VRAM
+    type: "mistral"
+    context_window: 8192
+    quantization: "4bit"
+    device: "auto"
+
+  # LoRA Configuration for fine-tuning
+  lora:
+    r: 8
+    alpha: 32
+    dropout: 0.1
+    target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+    bias: "none"
+    task_type: "CAUSAL_LM"
+
+  # Training Configuration
+  training:
+    batch_size: 4
+    gradient_accumulation_steps: 4
+    learning_rate: 2.0e-4
+    num_epochs: 1
+    warmup_steps: 100
+    max_grad_norm: 1.0
+    fp16: true
+    logging_steps: 10
+    save_steps: 100
+    save_total_limit: 3
+
+  # Retraining Schedule
+  retraining:
+    trigger_type: "adaptive"  # Options: "fixed", "adaptive", "manual"
+    conversation_threshold: 25  # Retrain after N conversations
+    time_threshold_hours: 24  # Or after N hours
+    importance_threshold: 0.7  # Only train on important conversations
+
+# Embedding Model Configuration
+embeddings:
+  model: "sentence-transformers/all-MiniLM-L6-v2"
+  dimension: 384
+  batch_size: 32
+  cache_dir: "./data/embeddings_cache"
+
+# Primary LLM Configuration
+primary_llm:
+  provider: "openai"  # Options: "openai", "anthropic", "local"
+  model: "gpt-4o-mini"  # 125k input context window
+  temperature: 0.7
+  max_tokens: 4096
+  context_window: 125000  # gpt-4o-mini supports 125k input tokens
+
+  # Fallback configuration
+  fallback:
+    provider: "anthropic"
+    model: "claude-3-sonnet-20240229"
+
+# Memory Management
+memory:
+  # Working Memory (Real-time context file)
+  working_memory:
+    max_size: 10  # Last N conversations
+    file_path: "./data/working_memory.json"
+    update_frequency: "realtime"
+
+  # Storage Configuration
+  storage:
+    conversations_path: "./data/conversations"
+    models_path: "./data/models"
+    adapters_path: "./data/models/adapters"
+    checkpoints_path: "./data/models/checkpoints"
+    backup_path: "./data/backups"
+    backup_interval_hours: 24
+
+  # Retention Policy
+  retention:
+    compress_after_days: 30  # Compress old conversations to summaries
+    archive_after_days: 90   # Move to cold storage
+    delete_after_days: 365   # Permanent deletion
+    importance_threshold: 0.5  # Keep important conversations longer
+
+  # Context Window Management
+  context_window:
+    max_tokens: 2048  # SLM context window
+    overflow_strategy: "chunking"  # Options: "chunking", "summarization", "hybrid"
+    chunk_size: 1024
+    chunk_overlap: 128
+    priority_scoring: true  # Prioritize important chunks
+
+# Tool Call Interface
+tools:
+  enabled: true
+  timeout_seconds: 30
+  max_retries: 3
+
+  # Available tools for Primary LLM
+  available:
+    - name: "memory_search"
+      description: "Search memory for relevant conversations and facts"
+      parameters:
+        - query: "string"
+        - query_type: "semantic|temporal|factual"
+        - limit: "integer"
+
+    - name: "memory_store"
+      description: "Store new information in memory"
+      parameters:
+        - content: "string"
+        - importance: "float"
+        - tags: "array"
+
+    - name: "get_context"
+      description: "Get recent conversation context"
+      parameters:
+        - num_recent: "integer"
+
+    - name: "summarize_memory"
+      description: "Get summary of stored memories"
+      parameters:
+        - time_range: "string"
+        - topics: "array"
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  log_level: "info"
+  cors_origins: ["*"]
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60
+
+# Monitoring & Logging
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  log_file: "./logs/memory_system.log"
+  log_level: "INFO"
+  log_format: "json"
+
+  # Metrics to track
+  metrics:
+    - "conversation_count"
+    - "memory_query_latency"
+    - "training_time"
+    - "model_size"
+    - "database_size"
+    - "cache_hit_rate"
+
+# Docker Configuration
+docker:
+  volumes:
+    - "./data:/app/data"
+    - "./logs:/app/logs"
+    - "./models:/app/models"
+
+  environment:
+    PYTHONUNBUFFERED: "1"
+    CUDA_VISIBLE_DEVICES: "0"
+    TRANSFORMERS_CACHE: "/app/models/cache"
+
+# Feature Flags
+features:
+  enable_compression: true
+  enable_summarization: true
+  enable_user_preferences: true  # Support # commands for preferences
+  enable_auto_tagging: true
+  enable_fact_extraction: true
+  enable_multi_user: false  # Future feature
+  enable_distributed_training: false  # Future feature
+
+# Performance Tuning
+performance:
+  use_gpu: true
+  mixed_precision: true
+  gradient_checkpointing: true
+  optimize_embeddings: true
+  cache_embeddings: true
+  async_training: true
+  parallel_queries: true

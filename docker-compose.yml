@@ -1,0 +1,168 @@
+services:
+  # PostgreSQL with pgvector extension
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: memory_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-memory_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/database/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - memory_network
+
+  # Redis for task queue and caching
+  redis:
+    image: redis:7-alpine
+    container_name: memory_redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes ${REDIS_PASSWORD:+--requirepass $REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - memory_network
+
+  # Main application
+  # For Linux with NVIDIA GPU: change dockerfile to Dockerfile.cuda
+  app:
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}  # Use Dockerfile.cuda for GPU on Linux
+      target: ${BUILD_TARGET:-production}
+    container_name: memory_app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-memory_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - USE_GPU=${USE_GPU:-false}  # Set to true if using Dockerfile.cuda
+      - TRANSFORMERS_CACHE=/app/models/cache
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=${DEBUG:-false}
+    ports:
+      - "${API_PORT:-8000}:8000"
+      - "${METRICS_PORT:-9090}:9090"
+    volumes:
+      # Persistent data
+      - ./data/conversations:/app/data/conversations
+      - ./data/models:/app/data/models
+      - ./data/backups:/app/data/backups
+      - ./data/embeddings_cache:/app/data/embeddings_cache
+      - ./logs:/app/logs
+      # Model cache (can be large)
+      - model_cache:/app/models/cache
+      # Config (for development)
+      - ./config.yaml:/app/config.yaml:ro
+    networks:
+      - memory_network
+    # Uncomment below for NVIDIA GPU support (Linux only, use Dockerfile.cuda)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: ${GPU_COUNT:-1}
+    #           capabilities: [gpu]
+    restart: unless-stopped
+
+  # Celery worker for background tasks (training, etc.)
+  worker:
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}  # Use Dockerfile.cuda for GPU on Linux
+      target: ${BUILD_TARGET:-production}
+    container_name: memory_worker
+    command: celery -A src.tasks.celery_app worker --loglevel=info --concurrency=${WORKER_CONCURRENCY:-2}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-memory_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - USE_GPU=${USE_GPU:-false}  # Set to true if using Dockerfile.cuda
+      - TRANSFORMERS_CACHE=/app/models/cache
+    volumes:
+      - ./data/conversations:/app/data/conversations
+      - ./data/models:/app/data/models
+      - ./data/backups:/app/data/backups
+      - ./logs:/app/logs
+      - model_cache:/app/models/cache
+      - ./config.yaml:/app/config.yaml:ro
+    networks:
+      - memory_network
+    # Uncomment below for NVIDIA GPU support (Linux only, use Dockerfile.cuda)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: ${GPU_COUNT:-1}
+    #           capabilities: [gpu]
+    restart: unless-stopped
+
+  # Celery beat for scheduled tasks
+  beat:
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}  # Use Dockerfile.cuda for GPU on Linux
+      target: ${BUILD_TARGET:-production}
+    container_name: memory_beat
+    command: celery -A src.tasks.celery_app beat --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    networks:
+      - memory_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  model_cache:
+    driver: local
+
+networks:
+  memory_network:
+    driver: bridge

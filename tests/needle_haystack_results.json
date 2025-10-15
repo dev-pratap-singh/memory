@@ -1,0 +1,439 @@
+{
+  "config": {
+    "test_type": "needle_in_haystack",
+    "num_needles": 20,
+    "started_at": "2025-10-14T21:19:32.168097+00:00",
+    "completed_at": "2025-10-14T21:22:50.531154+00:00"
+  },
+  "accuracy": {
+    "total_needles": 20,
+    "needles_found": 2,
+    "needles_missed": 18,
+    "accuracy_percentage": 10.0,
+    "average_keyword_accuracy": 7.083333333333333,
+    "average_retrieval_time_ms": 9071.674680709839
+  },
+  "needle_results": [
+    {
+      "needle_id": 0,
+      "category": "preferences",
+      "query": "What is my favorite programming language and why?",
+      "expected_keywords": [
+        "rust",
+        "memory safety",
+        "performance"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "rust",
+        "memory safety",
+        "performance"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 12801.00703239441,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 1,
+      "category": "dates",
+      "query": "When is the project deployment scheduled?",
+      "expected_keywords": [
+        "march 15",
+        "2025",
+        "3:00 pm",
+        "est"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "march 15",
+        "2025",
+        "3:00 pm",
+        "est"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 8094.878911972046,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 2,
+      "category": "security",
+      "query": "When was the database password last changed?",
+      "expected_keywords": [
+        "january 3",
+        "2025",
+        "security team"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "january 3",
+        "2025",
+        "security team"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9753.413915634155,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 3,
+      "category": "technical",
+      "query": "What is the API rate limit for premium users?",
+      "expected_keywords": [
+        "1000",
+        "requests",
+        "minute",
+        "premium"
+      ],
+      "keywords_found": [
+        "premium"
+      ],
+      "keywords_missing": [
+        "1000",
+        "requests",
+        "minute"
+      ],
+      "keyword_accuracy": 0.25,
+      "is_correct": false,
+      "retrieval_time_ms": 2653.4578800201416,
+      "response_preview": "The API rate limit for premium users can vary depending on the specific service or platform you are referring to. Typically, premium users may have higher limits compared to free users, but the exact ..."
+    },
+    {
+      "needle_id": 4,
+      "category": "business",
+      "query": "What is our Q2 2025 revenue target?",
+      "expected_keywords": [
+        "2.5 million",
+        "q2",
+        "2025",
+        "15%"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "2.5 million",
+        "q2",
+        "2025",
+        "15%"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9022.07899093628,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 5,
+      "category": "devops",
+      "query": "Which Docker base image should we use in production?",
+      "expected_keywords": [
+        "alpine",
+        "3.19",
+        "production"
+      ],
+      "keywords_found": [
+        "alpine",
+        "production"
+      ],
+      "keywords_missing": [
+        "3.19"
+      ],
+      "keyword_accuracy": 0.6666666666666666,
+      "is_correct": true,
+      "retrieval_time_ms": 9763.071060180664,
+      "response_preview": "Choosing a Docker base image for production depends on several factors, including the application requirements, security considerations, and performance. Here are some common base images and their use..."
+    },
+    {
+      "needle_id": 6,
+      "category": "preferences",
+      "query": "What code editor do I prefer?",
+      "expected_keywords": [
+        "neovim",
+        "lazyvim"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "neovim",
+        "lazyvim"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9168.126106262207,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 7,
+      "category": "operations",
+      "query": "When does the backup system run and how long are backups kept?",
+      "expected_keywords": [
+        "2:30 am",
+        "night",
+        "30 days"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "2:30 am",
+        "night",
+        "30 days"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 2133.2480907440186,
+      "response_preview": "Could you please specify which backup system you are referring to? Different systems have different schedules and retention policies."
+    },
+    {
+      "needle_id": 8,
+      "category": "ml",
+      "query": "What are the optimal training parameters for our ML model?",
+      "expected_keywords": [
+        "batch size",
+        "32",
+        "learning rate",
+        "0.001"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "batch size",
+        "32",
+        "learning rate",
+        "0.001"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 8891.47400856018,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 9,
+      "category": "personal",
+      "query": "When is my birthday and what's my favorite cake?",
+      "expected_keywords": [
+        "june 18",
+        "1990",
+        "chocolate raspberry"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "june 18",
+        "1990",
+        "chocolate raspberry"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 16758.848905563354,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 10,
+      "category": "database",
+      "query": "What are our database connection pool settings?",
+      "expected_keywords": [
+        "20",
+        "connections",
+        "30",
+        "timeout"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "20",
+        "connections",
+        "30",
+        "timeout"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 8769.921779632568,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 11,
+      "category": "meetings",
+      "query": "When is our daily standup and where?",
+      "expected_keywords": [
+        "9:30 am",
+        "pacific",
+        "zoom",
+        "123-456-789"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "9:30 am",
+        "pacific",
+        "zoom",
+        "123-456-789"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9385.962009429932,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 12,
+      "category": "security",
+      "query": "When does our SSL certificate expire?",
+      "expected_keywords": [
+        "december 31",
+        "2025",
+        "30 days"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "december 31",
+        "2025",
+        "30 days"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 8836.211919784546,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 13,
+      "category": "database",
+      "query": "Which PostgreSQL version should we use?",
+      "expected_keywords": [
+        "16.2",
+        "pgvector",
+        "0.6.0"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "16.2",
+        "pgvector",
+        "0.6.0"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 6401.831865310669,
+      "response_preview": "The choice of PostgreSQL version depends on several factors including your application's requirements, the features you need, and the stability or performance you desire. Here are some general recomme..."
+    },
+    {
+      "needle_id": 14,
+      "category": "personal",
+      "query": "Where is my home office and what's the internet speed?",
+      "expected_keywords": [
+        "austin",
+        "texas",
+        "1 gbps",
+        "fiber"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "austin",
+        "texas",
+        "1 gbps",
+        "fiber"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 17977.740049362183,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 15,
+      "category": "devops",
+      "query": "How long does our CI/CD pipeline take?",
+      "expected_keywords": [
+        "8 minutes",
+        "4",
+        "parallel",
+        "test"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "8 minutes",
+        "4",
+        "parallel",
+        "test"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9358.704805374146,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 16,
+      "category": "support",
+      "query": "What is our support SLA for critical issues?",
+      "expected_keywords": [
+        "4 hours",
+        "critical",
+        "24 hours"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "4 hours",
+        "critical",
+        "24 hours"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9549.514055252075,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 17,
+      "category": "personal",
+      "query": "Where do I like to vacation and when?",
+      "expected_keywords": [
+        "kyoto",
+        "japan",
+        "cherry blossom",
+        "april"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "kyoto",
+        "japan",
+        "cherry blossom",
+        "april"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 9324.31697845459,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 18,
+      "category": "infrastructure",
+      "query": "What are our Kubernetes cluster specifications?",
+      "expected_keywords": [
+        "5 nodes",
+        "32 gb",
+        "containerd"
+      ],
+      "keywords_found": [],
+      "keywords_missing": [
+        "5 nodes",
+        "32 gb",
+        "containerd"
+      ],
+      "keyword_accuracy": 0.0,
+      "is_correct": false,
+      "retrieval_time_ms": 8815.70816040039,
+      "response_preview": ""
+    },
+    {
+      "needle_id": 19,
+      "category": "operations",
+      "query": "Where do monitoring alerts go?",
+      "expected_keywords": [
+        "slack",
+        "#alerts",
+        "pagerduty",
+        "p0"
+      ],
+      "keywords_found": [
+        "slack",
+        "pagerduty"
+      ],
+      "keywords_missing": [
+        "#alerts",
+        "p0"
+      ],
+      "keyword_accuracy": 0.5,
+      "is_correct": true,
+      "retrieval_time_ms": 3973.9770889282227,
+      "response_preview": "Monitoring alerts typically go to a designated notification system or platform, which can include:\n\n1. **Email Notifications:** Alerts are sent to specific email addresses.\n2. **Messaging Apps:** Inte..."
+    }
+  ]
+}

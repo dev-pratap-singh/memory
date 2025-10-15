@@ -1,0 +1,81 @@
+# Multi-stage Docker build for Dual-Model Memory System
+FROM nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04 AS base
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-pip \
+    python3-dev \
+    build-essential \
+    git \
+    curl \
+    wget \
+    libpq-dev \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip3 install --upgrade pip && \
+    pip3 install -r requirements.txt
+
+# Copy application code
+COPY src/ ./src/
+COPY config.yaml .
+COPY .env.example .env
+
+# Create necessary directories
+RUN mkdir -p /app/data/{conversations,models/{adapters,checkpoints},backups,embeddings_cache} \
+    /app/logs \
+    /app/models/cache
+
+# Set permissions
+RUN chmod -R 755 /app
+
+# Expose ports
+EXPOSE 8000 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Default command
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+# Development stage
+FROM base AS development
+
+# Install development dependencies
+RUN pip3 install \
+    ipython \
+    jupyter \
+    pytest \
+    pytest-asyncio \
+    black \
+    flake8 \
+    mypy
+
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+
+# Production stage
+FROM base AS production
+
+# Run as non-root user
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
