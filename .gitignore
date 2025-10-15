@@ -1,0 +1,81 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build & Distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Data & Storage
+data/
+storage/*
+!storage/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Temporary & Development Files
+sample-files/
+
+# Testing & Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+test-results.xml
+test_coverage.json
+test_coverage_report/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Model Cache & Checkpoints
+*.ckpt
+*.pth
+*.pt
+models/
+checkpoints/
